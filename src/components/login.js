@@ -1,11 +1,12 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login'
-import { navigate } from "gatsby"
+import { navigate } from 'gatsby'
+import { handleLogin } from '../services/auth'
 
 
 const loginSucces = (res) => {
-  console.log('success ======>', res);
-  navigate(`/`)
+  handleLogin(res.profileObj);
+  navigate(`/app/profile`)
 }
 
 const loginFail = (res) => {
