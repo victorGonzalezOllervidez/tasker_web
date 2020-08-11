@@ -1,5 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 import { setTokenCookie } from '../../lib/cookie';
+import nano from '../../lib/couch';
 
 export default async (req, res) => {
   if (req.method !== 'POST') {
@@ -15,8 +16,16 @@ export default async (req, res) => {
   const payload = ticket.getPayload();
 
   if (payload) {
-    const userid = payload['sub'];
-    setTokenCookie(res, idToken)
+    const user = `user_${payload['sub']}`;
+    const dbExists = await nano.db.get(user)
+    .then((body) => body)
+    .catch((err) => err);
+    if (dbExists.statusCode && dbExists.statusCode === 404) {
+      nano.db.create(user).then((body) => {
+        console.log('database alice created!', body);
+      })
+    }
+    setTokenCookie(res, idToken);
   }
 
   res.end()
