@@ -25,7 +25,7 @@ export default async (req, res) => {
         console.log('database alice created!', body);
       })
     }
-    setTokenCookie(res, idToken);
+    setTokenCookie(res, idToken, payload['sub']);
   }
 
   res.end()
