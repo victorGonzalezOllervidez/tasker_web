@@ -1,6 +1,4 @@
 import { useRouter } from 'next/router'
-import Layout from './layout';
-
 
 const Router = ({ component: Component, ...rest }) => {
   const router = useRouter();
@@ -14,9 +12,7 @@ const Router = ({ component: Component, ...rest }) => {
     // }
   }
     return (
-      <Layout>
-        <Component {...rest} />
-      </Layout>
+      <Component {...rest} />
     )
 }
 

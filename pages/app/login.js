@@ -8,7 +8,7 @@ const Login = () => {
       method: 'POST',
       headers: { Authorization: `Barer ${res.tokenId}` },
     }).then((res) => {
-      router.push('/app/dashboard')
+      router.push('/app/home')
     })
   }
 
