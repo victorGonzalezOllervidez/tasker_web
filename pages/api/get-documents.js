@@ -5,11 +5,10 @@ export default async (req, res) => {
     const db = nano.use(`user_${req.cookies.user_id}`)
     db.find({
       selector: {
-        parent_id: 'home'
+        parent_id: req.query.id,
       }
     }).then((result) => {
-      res.statusCode = 200
-      res.json(result)
+      res.status(200).send(result);
     })
   }
 }
