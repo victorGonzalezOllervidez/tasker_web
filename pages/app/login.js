@@ -7,8 +7,9 @@ const Login = () => {
     fetch('/api/login', {
       method: 'POST',
       headers: { Authorization: `Barer ${res.tokenId}` },
-    }).then((res) => {
+    }).then(() => {
       router.push('/app/docs/home')
+      localStorage.setItem('user', JSON.stringify(res.profileObj))
     })
   }
 

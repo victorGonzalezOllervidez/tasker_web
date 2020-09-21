@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'next/router';
+import Link from 'next/link'
 import io from 'socket.io-client';
 import Layout from '../../../components/layout';
 
 class Home extends Component {
   state = {
     docs: [],
-    dirs: ['home'],
+    dir: 'home',
+    breadcumbs: [],
   }
 
   navigate(doc) {
@@ -16,6 +18,9 @@ class Home extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (!prevProps.router.query.slug) {
       const currentId = this.props.router.query.slug[0];
+      this.setState({
+        dir: currentId,
+      });
       console.log('mmm q hacer? ==>', this.props.router.query.slug, prevProps.router.query.slug);
       fetch(`/api/get-documents/?id=${currentId}`)
       .then((res) => res.json())
@@ -30,6 +35,9 @@ class Home extends Component {
         .then((res) => res.json())
         .then((res) => {
           console.log('res =====>', res);
+          this.setState({
+            breadcumbs: res.breadcumbs
+          });
         })
         .catch((err) => {
           console.error(err);
@@ -61,9 +69,28 @@ class Home extends Component {
   }
 
   render() {
+    const { dir, breadcumbs } = this.state;
     return (
       <Layout>
-        <h1>Hola soy el Home</h1>
+        {
+          dir === 'home' ? (<h1>Home</h1>) :
+        (<nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            {/* <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data</li> */}
+            {
+              breadcumbs.map((bread) => (
+                <li className="breadcrumb-item">
+                  <Link href={`/app/docs/${bread.id}`}>
+                    <a>{bread.name}</a>
+                  </Link>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>)
+        }
         <ul>
           {
             this.state.docs.map((doc) => {

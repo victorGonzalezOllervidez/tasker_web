@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+// import '../styles/globals.css'
 import Router from '../components/router';
 
 function MyApp({ Component, pageProps }) {

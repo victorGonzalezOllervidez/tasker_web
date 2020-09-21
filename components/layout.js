@@ -1,46 +1,51 @@
 import Head from 'next/head';
+import styles from '../styles/App.module.scss';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 
-const logoutHandler = () => {
-  console.log('a webo');
-  fetch('/api/logout/', {
-    method: 'POST',
-  })
-}
+const Layout = ({ children }) => {
+  let [user, setUser] = useState({});
+  const router = useRouter();
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    fetch('/api/logout/', {
+      method: 'POST',
+    }).then((res) => {
+      router.push('/app/login')
+    })
+  }
 
-const Layout = ({ children }) => (
-  <>
-  <Head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossOrigin="anonymous" />
-  </Head>
-  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a className="navbar-brand" href="#">Navbar</a>
-    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon"></span>
-    </button>
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user')))
+  }, [])
 
-    <div className="collapse navbar-collapse" id="navbarColor01">
-      <ul className="navbar-nav mr-auto">
-        <li className="nav-item active">
-          <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Features</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Pricing</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">About</a>
-        </li>
-      </ul>
-      <div className="btn btn-outline-info my-2 my-sm-0" onClick={() => logoutHandler()}>Logout</div>
-    </div>
-  </nav>
+  return (
+    <>
+      <Head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
 
-  <main>
-    { children }
-  </main>
-  </>
-)
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+      </Head>
+      <header className={styles.appHeader}>
+        <nav className="navbar navbar-light fixed-top  bg-transparent">
+          <a className="navbar-brand text-white" href="#">Tasker Web</a>
+          <div>
+            <a className="text-white mx-3" href="#" onClick={(e) => logoutHandler(e)}>Logout</a>
+            <img className="rounded-circle" style={{width: '40px'}} src={user.imageUrl} alt="user"/>
+          </div>
+        </nav>
+      </header>
+      <div className={styles.fixedLayerContainer}>
+        <div className={styles.mainMenu}></div>
+      </div>
+      <article>
+        <div className={styles.appContainer}>
+          <div className="container-fluid">{ children }</div>
+        </div>
+      </article>
+    </>
+  )}
 
 export default Layout

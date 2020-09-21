@@ -1,0 +1,27 @@
+.appHeader{
+  height: 56px;
+  background: #074E68 !important;
+  color: white !important;
+}
+
+.fixedLayerContainer {
+    position: fixed;
+    z-index: 6;
+    top: 56px;
+    left: 0;
+    width: 0;
+    height: calc(100vh - 56px);
+    display: flex;
+    flex-direction: column;
+}
+
+.appContainer{
+  top: 0;
+  bottom: 0;
+  padding-left: 250px;
+}
+.mainMenu{
+  min-width: 250px;
+  background-color: #DAE1E3;
+  height: 100%;
+}
